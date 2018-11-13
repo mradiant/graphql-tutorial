@@ -1,10 +1,6 @@
-import {
-	makeExecutableSchema,
-	addMockFunctionsToSchema, // we'll use this later
-} from 'graphql-tools'
-import { resolvers } from './resolvers';
+import { gql } from 'apollo-server'
 
-const typeDefs = `
+const typeDefs = gql`
 type Channel {
    id: ID!                # "!" denotes a required field
    name: String
@@ -16,5 +12,4 @@ type Query {
 }
 `
 
-const schema = makeExecutableSchema({ typeDefs, resolvers })
-export { schema }
+export default typeDefs

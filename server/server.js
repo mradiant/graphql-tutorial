@@ -1,18 +1,21 @@
+import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
-import { graphqlExpress, graphiqlExpress } from 'graphql-server-express'
-import bodyParser from 'body-parser'
-import { schema } from './src/schema'
+import cors from 'cors';
+import typeDefs from './src/typeDefs'
+import resolvers from './src/resolvers'
 
-const PORT = 4000;
+const PORT = 4000
 
-const server = express();
+const server = new ApolloServer({ typeDefs, resolvers })
 
-server.use('/graphql', bodyParser.json(), graphqlExpress({
-	schema
-}));
+const app = express()
 
-server.use('/graphiql', graphiqlExpress({
-	endpointURL: '/graphql'
-}));
+server.applyMiddleware({ app })
 
-server.listen(PORT, () => console.log(`GraphQL Server is now running on http://localhost:${PORT}`));
+app.use('*', cors({
+	origin: 'http://localhost:3000',
+	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+	optionsSuccessStatus: 200,
+}))
+
+app.listen(PORT, () => console.log(`GraphQL Server is now running on http://localhost:${PORT}`));
