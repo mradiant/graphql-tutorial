@@ -2,13 +2,29 @@ import { gql } from 'apollo-server'
 
 const typeDefs = gql`
 type Channel {
-   id: ID!                # "!" denotes a required field
-   name: String
+  id: ID!
+  name: String
+  messages: [Message]!
 }
-# This type specifies the entry points into our API. In this case
-# there is only one - "channels" - which returns a list of channels.
+
+type Message {
+  id: ID!
+  text: String
+}
+
+input MessageInput{
+  channelId: ID!
+  text: String
+}
+
 type Query {
-   channels: [Channel]    # "[]" means this is a list of channels
+  channels: [Channel]
+  channel(id: ID!): Channel
+}
+
+type Mutation {
+	addChannel(name: String!): Channel
+	addMessage(message: MessageInput!): Message
 }
 `
 
