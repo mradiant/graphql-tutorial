@@ -1,3 +1,7 @@
+import { PubSub, withFilter } from 'apollo-server'
+
+const pubsub = new PubSub();
+
 const channels = [{
 	id: '1',
 	name: 'soccer',
@@ -19,10 +23,21 @@ const channels = [{
 		text: 'hello baseball world series',
 	}]
 }];
+
 let nextId = 3;
 let nextMessageId = 5;
 
 const resolvers = {
+	Subscription: {
+		messageAdded: {
+			subscribe: withFilter(
+				() => pubsub.asyncIterator(['messageAdded']),
+				(payload, variables) => {
+					return payload.channelId === variables.channelId;
+				}
+			)
+		}
+	},
 	Query: {
 		channels: () => ( channels ),
 		channel: (root, { id }) => {
@@ -37,12 +52,14 @@ const resolvers = {
 		},
 		addMessage: (root, { message }) => {
 			const channel = channels.find(channel => channel.id === message.channelId);
-			if (!channel) throw new Error("Channel does not exist");
+			if (!channel)
+				throw new Error('Channel does not exist');
 			const newMessage = { id: String(nextMessageId++), text: message.text };
 			channel.messages.push(newMessage);
+			pubsub.publish('messageAdded', { messageAdded: newMessage, channelId: message.channelId });
 			return newMessage;
 		},
-	},
+	},	
 };
 
 export default resolvers

@@ -24,4 +24,4 @@ const ChannelPreview = ({ channelId }) => (
 	</Query>
 )
 
-export default (ChannelPreview);
+export default ChannelPreview;

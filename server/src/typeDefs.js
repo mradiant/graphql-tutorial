@@ -26,6 +26,10 @@ type Mutation {
 	addChannel(name: String!): Channel
 	addMessage(message: MessageInput!): Message
 }
+
+type Subscription {
+  messageAdded(channelId: ID!): Message
+}
 `
 
 export default typeDefs
