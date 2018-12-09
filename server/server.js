@@ -1,7 +1,6 @@
 import { createServer } from 'http'
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
-import { graphiqlExpress } from 'graphql-server-express'
 import cors from 'cors'
 import typeDefs from './src/typeDefs'
 import resolvers from './src/resolvers'

@@ -1,15 +1,22 @@
 import { gql } from 'apollo-server'
 
 const typeDefs = gql`
+type MessageFeed {
+  cursor: String!
+  messages: [Message]!
+}
+
 type Channel {
   id: ID!
   name: String
-  messages: [Message]!
+	messages: [Message]!
+	messageFeed(cursor: String): MessageFeed 
 }
 
 type Message {
   id: ID!
-  text: String
+	text: String
+	createdAt: Int
 }
 
 input MessageInput{

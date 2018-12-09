@@ -5,12 +5,12 @@ import gql from "graphql-tag"
 import AddChannel from "./AddChannel"
 
 export const CHANNELS_LIST = gql`
-   {
-     channels {
-       id
-       name
-     }
-   }
+	query ChannelsListQuery {
+    channels {
+      id
+      name
+    }
+  }
  `;
 
 const ChannelsList = () => (
@@ -25,6 +25,7 @@ const ChannelsList = () => (
       return (
 				<div className="channelsList">
 					<AddChannel />
+					
 					{channels.map(ch =>
 						(<div key={ch.id} className={'channel ' + (ch.id < 0 ? 'optimistic' : '')}>
 							<Link to={ch.id < 0 ? `/` : `channel/${ch.id}`}>
